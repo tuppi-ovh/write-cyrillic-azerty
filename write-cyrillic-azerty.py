@@ -4,12 +4,12 @@ import time
 def main(stdscr):
     # do not wait for input when calling getch
     stdscr.nodelay(1)
-    # remember keys
-    offset = 0
     while True:
         # get keyboard input, returns -1 if none available
         c = stdscr.getch()
-
+        # position
+        y, x = stdscr.getyx()
+        # switch case on key id
         if c == -1:
             pass
         # alt
@@ -21,6 +21,26 @@ def main(stdscr):
             pass
         elif c == 0xc3:
             pass
+        # left
+        elif c == 0x104:
+            stdscr.move(y, max(0, x - 1))
+        # up
+        elif c == 0x103:
+            stdscr.move(max(0, y - 1), x)
+        # down
+        elif c == 0x102:
+            stdscr.move(y + 1, x)
+        # right
+        elif c == 0x105:
+            stdscr.move(y, x + 1)
+        # backspace
+        elif c == 0x107:
+            stdscr.addstr('\x08')
+            stdscr.clrtoeol()
+        # new line
+        elif c == 0x0a:
+            stdscr.move(y + 1, 0)
+        # other cases
         else:
             # convert to cyrillic
             switch={
@@ -53,15 +73,18 @@ def main(stdscr):
               0x2a: 'ъ',
               0xac: 'э',
               0xbb: 'ю',
-              0xa2: 'я'
+              0xa2: 'я',
+              0x20: ' ',
+              0x21: '!',
+              0x3a: ':',
+              0x2f: '/'
             }
-            char = switch.get(offset * 256 + c, str(hex(c)))
-            # print
-            stdscr.addstr(char + ' ')
-            stdscr.refresh()
-            # reset special char
-            offset = 0
+            char = switch.get(c, str(hex(c)))
+            stdscr.insstr(char)
+            stdscr.move(y, x + 1)
 
+        # refresh
+        stdscr.refresh()
         # sleep to relax cpu
         time.sleep(0.01)
 
