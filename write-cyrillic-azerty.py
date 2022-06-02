@@ -36,7 +36,10 @@ def main(stdscr):
         # backspace
         elif c == 0x107:
             stdscr.addstr('\x08')
-            stdscr.clrtoeol()
+            stdscr.delch()
+        # delete
+        elif c == 0x14a:
+            stdscr.delch()
         # new line
         elif c == 0x0a:
             stdscr.move(y + 1, 0)
@@ -44,6 +47,7 @@ def main(stdscr):
         else:
             # convert to cyrillic
             switch={
+              # а...я
               0x61: 'а',
               0x62: 'б',
               0x76: 'в',
@@ -68,16 +72,35 @@ def main(stdscr):
               0x68: 'х',
               0x63: 'ц',
               0xa9: 'ч',
+              0x77: 'ш',
+              0xab: 'щ',
               0xb9: 'ь',
               0x79: 'ы',
               0x2a: 'ъ',
               0xac: 'э',
               0xbb: 'ю',
               0xa2: 'я',
+              # А...Я
+              0x41: 'А',
+              0xa4: 'Я',
+              # 0...9
+              0x30: '0',
+              0x31: '1',
+              0x32: '2',
+              0x33: '3',
+              0x34: '4',
+              0x35: '5',
+              0x36: '6',
+              0x37: '7',
+              0x38: '8',
+              0x39: '9',
+              # special
               0x20: ' ',
               0x21: '!',
               0x3a: ':',
-              0x2f: '/'
+              0x2f: '/',
+              0x2e: '.',
+              0x2c: ',',
             }
             char = switch.get(c, str(hex(c)))
             stdscr.insstr(char)
