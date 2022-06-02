@@ -13,13 +13,10 @@ def main(stdscr):
         if c == -1:
             pass
         # alt
-        elif c == 0xe2:
+        elif c in (0xe2, 0x82, 0xc2, 0xc3):
             pass
-        elif c == 0x82:
-            pass
-        elif c == 0xc2:
-            pass
-        elif c == 0xc3:
+        # unused
+        elif c in (0x71, 0x78):
             pass
         # left
         elif c == 0x104:
@@ -101,6 +98,7 @@ def main(stdscr):
               0x2f: '/',
               0x2e: '.',
               0x2c: ',',
+              0x3f: '?',
             }
             char = switch.get(c, str(hex(c)))
             stdscr.insstr(char)
