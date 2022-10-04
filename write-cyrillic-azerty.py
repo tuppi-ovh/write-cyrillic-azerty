@@ -4,6 +4,7 @@ import time
 def main(stdscr):
     # do not wait for input when calling getch
     stdscr.nodelay(1)
+    alt = 0
     while True:
         # get keyboard input, returns -1 if none available
         c = stdscr.getch()
@@ -11,9 +12,6 @@ def main(stdscr):
         y, x = stdscr.getyx()
         # switch case on key id
         if c == -1:
-            pass
-        # alt
-        elif c in (0xe2, 0x82, 0xc2, 0xc3):
             pass
         # unused
         elif c in (0x71, 0x78):
@@ -51,7 +49,7 @@ def main(stdscr):
               0x67: 'г',
               0x64: 'д',
               0x65: 'е',
-              0xa6: 'ж',
+              0xc58b: 'ж',
               0x7a: 'з',
               0x69: 'и',
               0x6a: 'й',
@@ -68,18 +66,23 @@ def main(stdscr):
               0x66: 'ф',
               0x68: 'х',
               0x63: 'ц',
-              0xa9: 'ч',
+              0xc2a2   : 'ч',
               0x77: 'ш',
-              0xab: 'щ',
+              0xc2bb   : 'щ',
               0xb9: 'ь',
               0x79: 'ы',
               0x2a: 'ъ',
               0xac: 'э',
-              0xbb: 'ю',
-              0xa2: 'я',
+              0xe28693 : 'ю',
+              0xc3a6   : 'я',
               # А...Я
               0x41: 'А',
-              0xa4: 'Я',
+              0x42: 'Б',
+              0x44: 'Д',
+              0x45: 'Е',
+              0x4b: 'К',
+              0x50: 'П',
+              0xc386: 'Я',
               # 0...9
               0x30: '0',
               0x31: '1',
@@ -94,15 +97,23 @@ def main(stdscr):
               # special
               0x20: ' ',
               0x21: '!',
+              0x29: ')',
               0x3a: ':',
               0x2f: '/',
               0x2e: '.',
               0x2c: ',',
               0x3f: '?',
             }
-            char = switch.get(c, str(hex(c)))
-            stdscr.insstr(char)
-            stdscr.move(y, x + 1)
+            # switch-case on  code  
+            char = switch.get(alt * 256 + c, "alt")
+            # decide if print or alt  
+            if char == "alt":
+                alt = 256 * alt + c
+                #print("(c={} alt={})".format(hex(c), hex(alt)))
+            else: 
+                stdscr.insstr(char)
+                stdscr.move(y, x + 1)
+                alt = 0
 
         # refresh
         stdscr.refresh()
